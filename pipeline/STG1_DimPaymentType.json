@@ -25,7 +25,7 @@
 							"referenceName": "yellow-WorkspaceDefaultStorage",
 							"type": "LinkedServiceReference"
 						},
-						"folderPath": "a/a"
+						"folderPath": "yellow/synapse"
 					},
 					"compute": {
 						"coreCount": 8,
