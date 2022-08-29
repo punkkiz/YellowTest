@@ -33,6 +33,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     limit: 100,",
 				"     format: 'table',",
 				"     store: 'synapseanalytics',",
 				"     schemaName: 'dbo',",
