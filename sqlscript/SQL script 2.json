@@ -2,7 +2,7 @@
 	"name": "SQL script 2",
 	"properties": {
 		"content": {
-			"query": "SELECT TOP (100) [VendorID]\n,[tpep_pickup_datetime]\n,[tpep_dropoff_datetime]\n,[passenger_count]\n,[trip_distance]\n,[RatecodeID]\n,[store_and_fwd_flag]\n,[PULocationID]\n,[DOLocationID]\n,[payment_type]\n,[fare_amount]\n,[extra]\n,[mta_tax]\n,[tip_amount]\n,[tolls_amount]\n,[improvement_surcharge]\n,[total_amount]\n,[congestion_surcharge]\n,[airport_fee]\n FROM [dbo].[Fact]",
+			"query": "CREATE USER [yellow]\n\tWITHOUT LOGIN\n\tWITH DEFAULT_SCHEMA = dbo\n\nGO\n\n\n",
 			"metadata": {
 				"language": "sql"
 			},
