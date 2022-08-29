@@ -109,6 +109,7 @@ However - this dataflow looks up the new surogate keys, mentioned earlier, and a
 
 Data model explained:
 
+Diagram
 
 ![Untitled Diagram drawio (1)](https://user-images.githubusercontent.com/112269784/187195224-1f33538d-c672-4d8f-9bef-19f99ec1737d.png)
 
