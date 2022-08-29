@@ -107,6 +107,10 @@ However - this dataflow looks up the new surogate keys, mentioned earlier, and a
 ![image](https://user-images.githubusercontent.com/112269784/187189159-ae5e1572-b39e-48c5-874f-fcd3a6572528.png)
 
 
+Data model explained:
+
+
+![Untitled Diagram drawio (1)](https://user-images.githubusercontent.com/112269784/187195224-1f33538d-c672-4d8f-9bef-19f99ec1737d.png)
 
 
 Database structure
@@ -129,6 +133,5 @@ Improvements:
    Data quality checks - not implemented. As mentioned above, separate dataflow/pipeline parameters can be outputed to a separate logging table to check row error counts, maymbe even re-direct errored rows to a separate table... all depends on the need. 
    Refresh scheduling - cureently everything is manual. Trigger on file arrival should work sort of OK in this scenario. If pickup script would be updated to pick only new files, and move files which are already in the DB to separate archive folder or something similar. 
    
-
 
 
