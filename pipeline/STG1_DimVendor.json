@@ -1,0 +1,45 @@
+{
+	"name": "STG1_DimVendor",
+	"properties": {
+		"activities": [
+			{
+				"name": "STG1_Dim_Vendor",
+				"description": "Dim_PaymentType dimension load with surogate key addition",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "STG2_Dim_Vendor",
+						"type": "DataFlowReference"
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "yellow-WorkspaceDefaultStorage",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "a/a"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "None",
+					"cacheSinks": {
+						"firstRowOnly": true
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-08-28T09:28:12Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

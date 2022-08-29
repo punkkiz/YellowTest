@@ -1,0 +1,124 @@
+{
+	"name": "SplitAndLoad",
+	"properties": {
+		"activities": [
+			{
+				"name": "Partition_input",
+				"description": "Splits source files into partitions by date",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.01:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "Pick_and_partition",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "Pool",
+						"type": "BigDataPoolReference"
+					}
+				}
+			},
+			{
+				"name": "InsertIntoLakeDB",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Partition_input",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "LoadDataflow",
+						"type": "DataFlowReference"
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "yellow-WorkspaceDefaultStorage",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "a/a"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "RowsWrite",
+				"description": "",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "InsertIntoLakeDB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "RowsWrite",
+					"value": {
+						"value": "@activity('InsertIntoLakeDB').output.runStatus.metrics.sink1.rowsWritten",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "RowsRead",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "InsertIntoLakeDB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "RowsRead",
+					"value": {
+						"value": "@activity('InsertIntoLakeDB').output.runStatus.metrics.sink1.rowsRead\n\n\n\n",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"RowsRead": {
+				"type": "String",
+				"defaultValue": "0"
+			},
+			"RowsWrite": {
+				"type": "String",
+				"defaultValue": "0"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-08-29T10:22:12Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

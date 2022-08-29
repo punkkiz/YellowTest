@@ -1,0 +1,75 @@
+{
+	"name": "STG2_Dim_PaymentType_STG1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "AzureSynapseAnalytics1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "stg1dimPaymentType"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureSynapseAnalytics1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "PaymentType"
+				}
+			],
+			"transformations": [
+				{
+					"name": "dimPaymentTypeid"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          NAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'synapseanalytics',",
+				"     schemaName: 'dbo',",
+				"     tableName: 'dim_PaymentType',",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     staged: true) ~> stg1dimPaymentType",
+				"stg1dimPaymentType keyGenerate(output(dim_ID as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> dimPaymentTypeid",
+				"dimPaymentTypeid sink(allowSchemaDrift: true,",
+				"     validateSchema: true,",
+				"     input(",
+				"          dim_PaymentType_id as integer,",
+				"          ID as integer,",
+				"          NAME as string",
+				"     ),",
+				"     format: 'table',",
+				"     store: 'synapseanalytics',",
+				"     schemaName: 'stg2',",
+				"     tableName: 'dim_PaymentType',",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     deletable: false,",
+				"     upsertable: false,",
+				"     truncate: true,",
+				"     allowCopyCommand: true,",
+				"     staged: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ID,",
+				"          NAME,",
+				"          dim_PaymentType_id = dim_ID",
+				"     )) ~> PaymentType"
+			]
+		}
+	}
+}

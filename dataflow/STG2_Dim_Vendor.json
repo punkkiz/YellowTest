@@ -1,0 +1,70 @@
+{
+	"name": "STG2_Dim_Vendor",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "AzureSynapseAnalytics1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "stg1DimVendor"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureSynapseAnalytics1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "stg2Vendor"
+				}
+			],
+			"transformations": [
+				{
+					"name": "dimVendorID"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          Name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'synapseanalytics',",
+				"     schemaName: 'dbo',",
+				"     tableName: 'dim_Vendor',",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     staged: true) ~> stg1DimVendor",
+				"stg1DimVendor keyGenerate(output(dim_ID as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> dimVendorID",
+				"dimVendorID sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'synapseanalytics',",
+				"     schemaName: 'stg2',",
+				"     tableName: 'dim_Vendor',",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     deletable: false,",
+				"     upsertable: false,",
+				"     truncate: true,",
+				"     allowCopyCommand: true,",
+				"     staged: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ID,",
+				"          Name,",
+				"          dim_ID",
+				"     )) ~> stg2Vendor"
+			]
+		}
+	}
+}

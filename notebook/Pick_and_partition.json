@@ -1,0 +1,117 @@
+{
+	"name": "Pick_and_partition",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "Pool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "8757b28e-55a5-4e46-910a-e6e352a54935"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1"
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/efadbc61-64a8-4b09-a775-9d4676fbc85f/resourceGroups/Yellow/providers/Microsoft.Synapse/workspaces/yellow/bigDataPools/Pool",
+				"name": "Pool",
+				"type": "Spark",
+				"endpoint": "https://yellow.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/Pool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"microsoft": {
+						"language": "python"
+					},
+					"ms_comment_ranges": {
+						"3de6b7c5-4012-487b-b315-12c5f15b6fcf": {
+							"text": "",
+							"start": {
+								"line": 1,
+								"column": 1
+							},
+							"end": {
+								"line": 1,
+								"column": 1
+							}
+						}
+					},
+					"ms_comments": [
+						{
+							"threadId": "3de6b7c5-4012-487b-b315-12c5f15b6fcf",
+							"text": "display(df.limit(10))",
+							"status": "active",
+							"user": {
+								"name": "Paulius Burba",
+								"idType": "aad"
+							},
+							"createdDateUTC": 1661594233203,
+							"modifiedDateUTC": 1661594233203,
+							"replies": [
+								{
+									"replyId": "eba7fbea-80fb-41c6-a497-3ab75669a676",
+									"text": "input.write.partitionBy(['tpep_dropoff_Datetime']).format(\"parquet\")",
+									"user": {
+										"name": "Paulius Burba",
+										"idType": "aad"
+									},
+									"createdDateUTC": 1661594781089,
+									"modifiedDateUTC": 1661594781089
+								}
+							]
+						}
+					],
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"import pyspark.sql\t\r\n",
+					"from pyspark.sql.functions  import *\r\n",
+					"\r\n",
+					"df = spark.read.load('abfss://yellow@yellow2.dfs.core.windows.net/Incoming/yellow_tripdata_2022-04.parquet', format='parquet')\r\n",
+					"\r\n",
+					"RR= df.withColumn(\"test\", to_date(col(\"tpep_dropoff_Datetime\"))).write.partitionBy('test').format(\"parquet\").save('abfss://yellow@yellow2.dfs.core.windows.net/Staging', mode=\"append\")\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": null
+			}
+		]
+	}
+}

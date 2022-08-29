@@ -1,0 +1,75 @@
+{
+	"name": "STG2_Dim_RateCode_STG1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "AzureSynapseAnalytics1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "dbodimRateCode"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureSynapseAnalytics1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "stg2RateCode"
+				}
+			],
+			"transformations": [
+				{
+					"name": "dimRateCodeID"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          Name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'synapseanalytics',",
+				"     schemaName: 'dbo',",
+				"     tableName: 'dim_RateCode',",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     staged: true) ~> dbodimRateCode",
+				"dbodimRateCode keyGenerate(output(dim_ID as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> dimRateCodeID",
+				"dimRateCodeID sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          dim_RateCode_id as integer,",
+				"          Name as string,",
+				"          ID as integer",
+				"     ),",
+				"     format: 'table',",
+				"     store: 'synapseanalytics',",
+				"     schemaName: 'stg2',",
+				"     tableName: 'dim_RateCode',",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     deletable: false,",
+				"     upsertable: false,",
+				"     truncate: true,",
+				"     allowCopyCommand: true,",
+				"     staged: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Name,",
+				"          ID,",
+				"          dim_RateCode_id = dim_ID",
+				"     )) ~> stg2RateCode"
+			]
+		}
+	}
+}

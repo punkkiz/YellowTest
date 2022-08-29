@@ -1,0 +1,105 @@
+{
+	"name": "YellowMaster",
+	"properties": {
+		"activities": [
+			{
+				"name": "Split Source Files",
+				"description": "Splits source files to day grain, stores them and pushes data to dbo.fact",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SplitAndLoad",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Load Dim Vendor",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Split Source Files",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "STG1_DimVendor",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Load Dim Rate Code",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Load Dim Vendor",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "STG1_Dim_RateCode",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Load Dim Payment Type",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Load Dim Rate Code",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "STG1_DimPaymentType",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Load Fact table",
+				"description": "Loads fact table with surogate keys",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Load Dim Payment Type",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "STG2_fact",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-08-29T09:51:52Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

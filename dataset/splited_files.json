@@ -1,0 +1,98 @@
+{
+	"name": "splited_files",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Yellow",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Incoming",
+				"fileSystem": "yellow"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "VendorID",
+				"type": "INT64"
+			},
+			{
+				"name": "tpep_pickup_datetime",
+				"type": "TIMESTAMP_MICROS"
+			},
+			{
+				"name": "tpep_dropoff_datetime",
+				"type": "TIMESTAMP_MICROS"
+			},
+			{
+				"name": "passenger_count",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "trip_distance",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "RatecodeID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "store_and_fwd_flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "PULocationID",
+				"type": "INT64"
+			},
+			{
+				"name": "DOLocationID",
+				"type": "INT64"
+			},
+			{
+				"name": "payment_type",
+				"type": "INT64"
+			},
+			{
+				"name": "fare_amount",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "extra",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "mta_tax",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "tip_amount",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "tolls_amount",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "improvement_surcharge",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "total_amount",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "congestion_surcharge",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "airport_fee",
+				"type": "DOUBLE"
+			}
+		]
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}
