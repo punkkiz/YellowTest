@@ -18,14 +18,11 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "8757b28e-55a5-4e46-910a-e6e352a54935"
+				"spark.autotune.trackingId": "4a1bdbe7-508e-4d78-99e1-dd7513104c81"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"synapse_widget": {
-				"version": "0.1"
-			},
 			"enableDebugMode": false,
 			"kernelspec": {
 				"name": "synapse_pyspark",
@@ -41,14 +38,13 @@
 				"endpoint": "https://yellow.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/Pool",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net",
-					"authHeader": null
+					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
 				"cores": 4,
 				"memory": 28,
-				"extraHeader": null
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -109,8 +105,20 @@
 					"RR= df.withColumn(\"test\", to_date(col(\"tpep_dropoff_Datetime\"))).write.partitionBy('test').format(\"parquet\").save('abfss://yellow@yellow2.dfs.core.windows.net/Staging', mode=\"append\")\r\n",
 					""
 				],
-				"attachments": null,
 				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				]
 			}
 		]
 	}
