@@ -348,47 +348,6 @@
 								"firstRowOnly": true
 							}
 						}
-					},
-					{
-						"name": "RowsWrite",
-						"description": "",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Insert",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "RowsWrite",
-							"value": {
-								"value": "@activity('Insert').output.runStatus.metrics.Insert.rowsWritten",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "RowsRead",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Insert",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "RowsRead",
-							"value": {
-								"value": "@activity('Insert').output.runStatus.metrics.Insert.rowsRead\n\n\n\n",
-								"type": "Expression"
-							}
-						}
 					}
 				],
 				"policy": {
@@ -412,7 +371,8 @@
 				"[concat(variables('workspaceId'), '/notebooks/Pick_and_partition')]",
 				"[concat(variables('workspaceId'), '/bigDataPools/Pool')]",
 				"[concat(variables('workspaceId'), '/dataflows/LoadDataflow')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
