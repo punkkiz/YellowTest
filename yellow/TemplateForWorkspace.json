@@ -92,8 +92,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_PaymentType_STG1')]",
-				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]"
 			]
 		},
 		{
@@ -152,8 +151,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_Vendor')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
 			]
 		},
 		{
@@ -211,8 +209,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_RateCode_STG1')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
 			]
 		},
 		{
@@ -271,8 +268,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/stg2Fact')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
 			]
 		},
 		{
@@ -1372,46 +1368,6 @@
 			"properties": {
 				"type": "ManagedIdentity",
 				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "SELECT TOP (100) [VendorID]\n,[PULocationID]\n,[DOLocationID]\n,[RatecodeID]\n,[payment_type]\n,[store_and_fwd_flag]\n,[tpep_pickup_datetime]\n,[tpep_dropoff_datetime]\n,[passenger_count]\n,[trip_distance]\n,[fare_amount]\n,[extra]\n,[mta_tax]\n,[tip_amount]\n,[tolls_amount]\n,[improvement_surcharge]\n,[total_amount]\n,[congestion_surcharge]\n,[airport_fee]\n,[dim_Vendor_id]\n,[dim_PaymentType_id]\n,[dim_RateCode_id]\n FROM [read].[Fact]",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "DPool",
-						"poolName": "DPool"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 4')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "DROP TABLE [stg2].[dim_Vendor]\nGO\n\nSET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\n\nCREATE TABLE [stg2].[dim_Vendor]\n( \n\t[dim_Vendor_id] [int]   NULL,\n\t[Name] [nvarchar](256)  NULL,\n\t[ID] [int]  NULL\n)\nWITH\n(\n\tDISTRIBUTION = ROUND_ROBIN,\n\tCLUSTERED COLUMNSTORE INDEX\n)\nGO",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "DPool",
-						"poolName": "DPool"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
 			},
 			"dependsOn": []
 		},
