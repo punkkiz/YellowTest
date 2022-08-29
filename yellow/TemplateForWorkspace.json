@@ -303,7 +303,7 @@
 						}
 					},
 					{
-						"name": "InsertIntoLakeDB",
+						"name": "Insert",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -342,7 +342,10 @@
 								"coreCount": 8,
 								"computeType": "General"
 							},
-							"traceLevel": "Fine"
+							"traceLevel": "None",
+							"cacheSinks": {
+								"firstRowOnly": true
+							}
 						}
 					},
 					{
@@ -351,7 +354,7 @@
 						"type": "SetVariable",
 						"dependsOn": [
 							{
-								"activity": "InsertIntoLakeDB",
+								"activity": "Insert",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -361,7 +364,7 @@
 						"typeProperties": {
 							"variableName": "RowsWrite",
 							"value": {
-								"value": "@activity('InsertIntoLakeDB').output.runStatus.metrics.sink1.rowsWritten",
+								"value": "@activity('Insert').output.runStatus.metrics.sink1.rowsWritten",
 								"type": "Expression"
 							}
 						}
@@ -371,7 +374,7 @@
 						"type": "SetVariable",
 						"dependsOn": [
 							{
-								"activity": "InsertIntoLakeDB",
+								"activity": "Insert",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -381,7 +384,7 @@
 						"typeProperties": {
 							"variableName": "RowsRead",
 							"value": {
-								"value": "@activity('InsertIntoLakeDB').output.runStatus.metrics.sink1.rowsRead\n\n\n\n",
+								"value": "@activity('Insert').output.runStatus.metrics.sink1.rowsRead\n\n\n\n",
 								"type": "Expression"
 							}
 						}
