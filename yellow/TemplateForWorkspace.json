@@ -126,10 +126,10 @@
 							},
 							"staging": {
 								"linkedService": {
-									"referenceName": "yellow-WorkspaceDefaultStorage",
+									"referenceName": "Yellow",
 									"type": "LinkedServiceReference"
 								},
-								"folderPath": "a/a"
+								"folderPath": "yellow/synapse"
 							},
 							"compute": {
 								"coreCount": 8,
@@ -151,7 +151,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_Vendor')]",
-				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
 			]
 		},
 		{
@@ -268,8 +268,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/stg2Fact')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
 			]
 		},
 		{
@@ -372,8 +371,7 @@
 				"[concat(variables('workspaceId'), '/notebooks/Pick_and_partition')]",
 				"[concat(variables('workspaceId'), '/bigDataPools/Pool')]",
 				"[concat(variables('workspaceId'), '/dataflows/LoadDataflow')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
 			]
 		},
 		{
