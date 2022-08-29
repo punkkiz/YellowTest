@@ -7,7 +7,7 @@ https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page
 
 
 Azure workspace template to create all resources can be found here: 
-
+[ExportedTemplate-Yellow.zip](https://github.com/punkkiz/YellowTest/files/9444197/ExportedTemplate-Yellow.zip)
 
 Synapse resources are linked to this repository 
 
