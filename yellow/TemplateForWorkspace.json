@@ -336,13 +336,14 @@
 									"referenceName": "yellow-WorkspaceDefaultStorage",
 									"type": "LinkedServiceReference"
 								},
-								"folderPath": "a/a"
+								"folderPath": "yellow/synapse"
 							},
 							"compute": {
 								"coreCount": 8,
 								"computeType": "General"
 							},
 							"traceLevel": "None",
+							"runConcurrently": true,
 							"cacheSinks": {
 								"firstRowOnly": true
 							}
