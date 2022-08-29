@@ -365,7 +365,7 @@
 						"typeProperties": {
 							"variableName": "RowsWrite",
 							"value": {
-								"value": "@activity('Insert').output.runStatus.metrics.sink1.rowsWritten",
+								"value": "@activity('Insert').output.runStatus.metrics.Insert.rowsWritten",
 								"type": "Expression"
 							}
 						}
@@ -385,7 +385,7 @@
 						"typeProperties": {
 							"variableName": "RowsRead",
 							"value": {
-								"value": "@activity('Insert').output.runStatus.metrics.sink1.rowsRead\n\n\n\n",
+								"value": "@activity('Insert').output.runStatus.metrics.Insert.rowsRead\n\n\n\n",
 								"type": "Expression"
 							}
 						}
