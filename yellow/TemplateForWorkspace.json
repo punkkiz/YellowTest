@@ -152,7 +152,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_Vendor')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -256,7 +257,8 @@
 								"coreCount": 8,
 								"computeType": "General"
 							},
-							"traceLevel": "Fine"
+							"traceLevel": "Fine",
+							"sourceStagingConcurrency": 1
 						}
 					}
 				],
@@ -269,7 +271,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/stg2Fact')]",
-				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -1150,9 +1153,6 @@
 					],
 					"transformations": [
 						{
-							"name": "DefineTypes"
-						},
-						{
 							"name": "SelectCols"
 						},
 						{
@@ -1163,6 +1163,9 @@
 						},
 						{
 							"name": "DimRateCode"
+						},
+						{
+							"name": "DefineTypes"
 						}
 					],
 					"scriptLines": [
@@ -1234,10 +1237,6 @@
 						"     tableName: 'dim_RateCode',",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     staged: true) ~> stg2DimRateCode",
-						"SelectCols cast(output(",
-						"          VendorID as integer",
-						"     ),",
-						"     errors: true) ~> DefineTypes",
 						"SourceFact select(mapColumn(",
 						"          VendorID,",
 						"          tpep_pickup_datetime,",
@@ -1273,6 +1272,28 @@
 						"     multiple: false,",
 						"     pickup: 'any',",
 						"     broadcast: 'auto')~> DimRateCode",
+						"SelectCols cast(output(",
+						"          VendorID as integer,",
+						"          tpep_pickup_datetime as timestamp,",
+						"          tpep_dropoff_datetime as timestamp,",
+						"          passenger_count as integer,",
+						"          trip_distance as float,",
+						"          RatecodeID as integer,",
+						"          store_and_fwd_flag as string,",
+						"          PULocationID as integer,",
+						"          DOLocationID as integer,",
+						"          payment_type as integer,",
+						"          fare_amount as float,",
+						"          extra as float,",
+						"          mta_tax as float,",
+						"          tip_amount as float,",
+						"          tolls_amount as float,",
+						"          improvement_surcharge as float,",
+						"          total_amount as float,",
+						"          congestion_surcharge as float,",
+						"          airport_fee as float",
+						"     ),",
+						"     errors: true) ~> DefineTypes",
 						"VendorID sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
