@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "yellow"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"value": ""
+		},
+		"Yellow_accountKey": {
+			"value": ""
+		},
+		"yellow-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"Yellow_properties_typeProperties_url": {
+			"value": "https://yellow2.dfs.core.windows.net/"
+		},
+		"yellow-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://yellow2.dfs.core.windows.net"
+		}
+	}
+}

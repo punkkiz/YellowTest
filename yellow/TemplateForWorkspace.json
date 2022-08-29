@@ -1,0 +1,1571 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "yellow"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
+		},
+		"Yellow_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Yellow'"
+		},
+		"yellow-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'yellow-WorkspaceDefaultSqlServer'"
+		},
+		"Yellow_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://yellow2.dfs.core.windows.net/"
+		},
+		"yellow-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://yellow2.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/STG1_DimPaymentType')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "STG1_Dim_PaymentType",
+						"description": "Dim_PaymentType dimension load with surogate key addition",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "STG2_Dim_PaymentType_STG1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"stg1dimPaymentType": {},
+									"PaymentType": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "yellow-WorkspaceDefaultStorage",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "a/a"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "None",
+							"cacheSinks": {
+								"firstRowOnly": true
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-08-28T09:28:09Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_PaymentType_STG1')]",
+				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/STG1_DimVendor')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "STG1_Dim_Vendor",
+						"description": "Dim_PaymentType dimension load with surogate key addition",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "STG2_Dim_Vendor",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"stg1DimVendor": {},
+									"stg2Vendor": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "yellow-WorkspaceDefaultStorage",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "a/a"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "None",
+							"cacheSinks": {
+								"firstRowOnly": true
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-08-28T09:28:12Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_Vendor')]",
+				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/STG1_Dim_RateCode')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "STG2_Dim_RateCode",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "STG2_Dim_RateCode_STG1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"dbodimRateCode": {},
+									"stg2RateCode": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "Yellow",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "a/a"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "None",
+							"cacheSinks": {
+								"firstRowOnly": true
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-08-28T10:22:05Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/STG2_Dim_RateCode_STG1')]",
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/STG2_fact')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "stg2fact",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "stg2Fact",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SourceFact": {},
+									"stg2dimVendor": {},
+									"stg2PaymentType": {},
+									"stg2DimRateCode": {},
+									"stg2fact": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "yellow-WorkspaceDefaultStorage",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "a/a"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine",
+							"sourceStagingConcurrency": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-08-29T10:22:30Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/stg2Fact')]",
+				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SplitAndLoad')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Partition_input",
+						"description": "Splits source files into partitions by date",
+						"type": "SynapseNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.01:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": "Pick_and_partition",
+								"type": "NotebookReference"
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": "Pool",
+								"type": "BigDataPoolReference"
+							}
+						}
+					},
+					{
+						"name": "InsertIntoLakeDB",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Partition_input",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "LoadDataflow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"InputFromFiles": {},
+									"IntoDB": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "yellow-WorkspaceDefaultStorage",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "a/a"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "RowsWrite",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "InsertIntoLakeDB",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "RowsWrite",
+							"value": {
+								"value": "@activity('InsertIntoLakeDB').output.runStatus.metrics.sink1.rowsWritten",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "RowsRead",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "InsertIntoLakeDB",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "RowsRead",
+							"value": {
+								"value": "@activity('InsertIntoLakeDB').output.runStatus.metrics.sink1.rowsRead\n\n\n\n",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"RowsRead": {
+						"type": "String",
+						"defaultValue": "0"
+					},
+					"RowsWrite": {
+						"type": "String",
+						"defaultValue": "0"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-08-29T10:22:12Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/Pick_and_partition')]",
+				"[concat(variables('workspaceId'), '/bigDataPools/Pool')]",
+				"[concat(variables('workspaceId'), '/dataflows/LoadDataflow')]",
+				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/YellowMaster')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Split Source Files",
+						"description": "Splits source files to day grain, stores them and pushes data to dbo.fact",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SplitAndLoad",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Load Dim Vendor",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Split Source Files",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "STG1_DimVendor",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Load Dim Rate Code",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Load Dim Vendor",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "STG1_Dim_RateCode",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Load Dim Payment Type",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Load Dim Rate Code",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "STG1_DimPaymentType",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Load Fact table",
+						"description": "Loads fact table with surogate keys",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Load Dim Payment Type",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "STG2_fact",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-08-29T09:51:52Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/SplitAndLoad')]",
+				"[concat(variables('workspaceId'), '/pipelines/STG1_DimVendor')]",
+				"[concat(variables('workspaceId'), '/pipelines/STG1_Dim_RateCode')]",
+				"[concat(variables('workspaceId'), '/pipelines/STG1_DimPaymentType')]",
+				"[concat(variables('workspaceId'), '/pipelines/STG2_fact')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/splited_files')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Yellow",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Incoming",
+						"fileSystem": "yellow"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "VendorID",
+						"type": "INT64"
+					},
+					{
+						"name": "tpep_pickup_datetime",
+						"type": "TIMESTAMP_MICROS"
+					},
+					{
+						"name": "tpep_dropoff_datetime",
+						"type": "TIMESTAMP_MICROS"
+					},
+					{
+						"name": "passenger_count",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "trip_distance",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RatecodeID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "store_and_fwd_flag",
+						"type": "UTF8"
+					},
+					{
+						"name": "PULocationID",
+						"type": "INT64"
+					},
+					{
+						"name": "DOLocationID",
+						"type": "INT64"
+					},
+					{
+						"name": "payment_type",
+						"type": "INT64"
+					},
+					{
+						"name": "fare_amount",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "extra",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "mta_tax",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "tip_amount",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "tolls_amount",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "improvement_surcharge",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "total_amount",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "congestion_surcharge",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "airport_fee",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSynapseAnalytics1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Yellow')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('Yellow_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('Yellow_accountKey')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/yellow-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('yellow-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/yellow-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('yellow-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/LoadDataflow')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "splited_files",
+								"type": "DatasetReference"
+							},
+							"name": "InputFromFiles"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "IntoDB"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectColumns"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          VendorID as long,",
+						"          tpep_pickup_datetime as timestamp,",
+						"          tpep_dropoff_datetime as timestamp,",
+						"          passenger_count as double,",
+						"          trip_distance as double,",
+						"          RatecodeID as double,",
+						"          store_and_fwd_flag as string,",
+						"          PULocationID as long,",
+						"          DOLocationID as long,",
+						"          payment_type as long,",
+						"          fare_amount as double,",
+						"          extra as double,",
+						"          mta_tax as double,",
+						"          tip_amount as double,",
+						"          tolls_amount as double,",
+						"          improvement_surcharge as double,",
+						"          total_amount as double,",
+						"          congestion_surcharge as double,",
+						"          airport_fee as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> InputFromFiles",
+						"InputFromFiles select(mapColumn(",
+						"          VendorID,",
+						"          tpep_pickup_datetime,",
+						"          tpep_dropoff_datetime,",
+						"          passenger_count,",
+						"          trip_distance,",
+						"          RatecodeID,",
+						"          store_and_fwd_flag,",
+						"          PULocationID,",
+						"          DOLocationID,",
+						"          payment_type,",
+						"          fare_amount,",
+						"          extra,",
+						"          mta_tax,",
+						"          tip_amount,",
+						"          tolls_amount,",
+						"          improvement_surcharge,",
+						"          total_amount,",
+						"          congestion_surcharge,",
+						"          airport_fee",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectColumns",
+						"SelectColumns sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          VendorID as integer,",
+						"          tpep_pickup_datetime as timestamp,",
+						"          tpep_dropoff_datetime as timestamp,",
+						"          passenger_count as integer,",
+						"          trip_distance as decimal(18,0),",
+						"          RatecodeID as integer,",
+						"          store_and_fwd_flag as string,",
+						"          PULocationID as integer,",
+						"          DOLocationID as integer,",
+						"          payment_type as integer,",
+						"          fare_amount as decimal(18,0),",
+						"          extra as decimal(18,0),",
+						"          mta_tax as decimal(18,0),",
+						"          tip_amount as decimal(18,0),",
+						"          tolls_amount as decimal(18,0),",
+						"          improvement_surcharge as decimal(18,0),",
+						"          total_amount as decimal(18,0),",
+						"          congestion_surcharge as decimal(18,0),",
+						"          airport_fee as decimal(18,0)",
+						"     ),",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'Fact',",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     truncate: true,",
+						"     allowCopyCommand: true,",
+						"     staged: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          VendorID,",
+						"          tpep_pickup_datetime,",
+						"          tpep_dropoff_datetime,",
+						"          passenger_count,",
+						"          trip_distance,",
+						"          RatecodeID,",
+						"          store_and_fwd_flag,",
+						"          PULocationID,",
+						"          DOLocationID,",
+						"          payment_type,",
+						"          fare_amount,",
+						"          extra,",
+						"          mta_tax,",
+						"          tip_amount,",
+						"          tolls_amount,",
+						"          improvement_surcharge,",
+						"          total_amount,",
+						"          congestion_surcharge,",
+						"          airport_fee",
+						"     )) ~> IntoDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/splited_files')]",
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/STG2_Dim_PaymentType_STG1')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg1dimPaymentType"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "PaymentType"
+						}
+					],
+					"transformations": [
+						{
+							"name": "dimPaymentTypeid"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          NAME as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'dim_PaymentType',",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     staged: true) ~> stg1dimPaymentType",
+						"stg1dimPaymentType keyGenerate(output(dim_ID as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> dimPaymentTypeid",
+						"dimPaymentTypeid sink(allowSchemaDrift: true,",
+						"     validateSchema: true,",
+						"     input(",
+						"          dim_PaymentType_id as integer,",
+						"          ID as integer,",
+						"          NAME as string",
+						"     ),",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'stg2',",
+						"     tableName: 'dim_PaymentType',",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     truncate: true,",
+						"     allowCopyCommand: true,",
+						"     staged: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          NAME,",
+						"          dim_PaymentType_id = dim_ID",
+						"     )) ~> PaymentType"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/STG2_Dim_RateCode_STG1')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "dbodimRateCode"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg2RateCode"
+						}
+					],
+					"transformations": [
+						{
+							"name": "dimRateCodeID"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          Name as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'dim_RateCode',",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     staged: true) ~> dbodimRateCode",
+						"dbodimRateCode keyGenerate(output(dim_ID as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> dimRateCodeID",
+						"dimRateCodeID sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          dim_RateCode_id as integer,",
+						"          Name as string,",
+						"          ID as integer",
+						"     ),",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'stg2',",
+						"     tableName: 'dim_RateCode',",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     truncate: true,",
+						"     allowCopyCommand: true,",
+						"     staged: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Name,",
+						"          ID,",
+						"          dim_RateCode_id = dim_ID",
+						"     )) ~> stg2RateCode"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/STG2_Dim_Vendor')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg1DimVendor"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg2Vendor"
+						}
+					],
+					"transformations": [
+						{
+							"name": "dimVendorID"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          Name as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'dim_Vendor',",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     staged: true) ~> stg1DimVendor",
+						"stg1DimVendor keyGenerate(output(dim_ID as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> dimVendorID",
+						"dimVendorID sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'stg2',",
+						"     tableName: 'dim_Vendor',",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     truncate: true,",
+						"     allowCopyCommand: true,",
+						"     staged: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          Name,",
+						"          dim_ID",
+						"     )) ~> stg2Vendor"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/stg2Fact')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "SourceFact"
+						},
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg2dimVendor"
+						},
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg2PaymentType"
+						},
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg2DimRateCode"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "AzureSynapseAnalytics1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "stg2fact"
+						}
+					],
+					"transformations": [
+						{
+							"name": "DefineTypes"
+						},
+						{
+							"name": "SelectCols"
+						},
+						{
+							"name": "VendorID"
+						},
+						{
+							"name": "DimPaymentType"
+						},
+						{
+							"name": "DimRateCode"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          VendorID as integer,",
+						"          tpep_pickup_datetime as timestamp,",
+						"          tpep_dropoff_datetime as timestamp,",
+						"          passenger_count as integer,",
+						"          trip_distance as decimal(18,0),",
+						"          RatecodeID as integer,",
+						"          store_and_fwd_flag as string,",
+						"          PULocationID as integer,",
+						"          DOLocationID as integer,",
+						"          payment_type as integer,",
+						"          fare_amount as decimal(18,0),",
+						"          extra as decimal(18,0),",
+						"          mta_tax as decimal(18,0),",
+						"          tip_amount as decimal(18,0),",
+						"          tolls_amount as decimal(18,0),",
+						"          improvement_surcharge as decimal(18,0),",
+						"          total_amount as decimal(18,0),",
+						"          congestion_surcharge as decimal(18,0),",
+						"          airport_fee as decimal(18,0)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'Fact',",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     staged: true) ~> SourceFact",
+						"source(output(",
+						"          dim_Vendor_id as integer,",
+						"          Name as string,",
+						"          ID as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'stg2',",
+						"     tableName: 'dim_Vendor',",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     staged: true) ~> stg2dimVendor",
+						"source(output(",
+						"          dim_PaymentType_id as integer,",
+						"          ID as integer,",
+						"          NAME as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'stg2',",
+						"     tableName: 'dim_PaymentType',",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     staged: true) ~> stg2PaymentType",
+						"source(output(",
+						"          dim_RateCode_id as integer,",
+						"          Name as string,",
+						"          ID as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'stg2',",
+						"     tableName: 'dim_RateCode',",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     staged: true) ~> stg2DimRateCode",
+						"SelectCols cast(output(",
+						"          VendorID as integer",
+						"     ),",
+						"     errors: true) ~> DefineTypes",
+						"SourceFact select(mapColumn(",
+						"          VendorID,",
+						"          tpep_pickup_datetime,",
+						"          tpep_dropoff_datetime,",
+						"          passenger_count,",
+						"          trip_distance,",
+						"          RatecodeID,",
+						"          store_and_fwd_flag,",
+						"          PULocationID,",
+						"          DOLocationID,",
+						"          payment_type,",
+						"          fare_amount,",
+						"          extra,",
+						"          mta_tax,",
+						"          tip_amount,",
+						"          tolls_amount,",
+						"          improvement_surcharge,",
+						"          total_amount,",
+						"          congestion_surcharge,",
+						"          airport_fee",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCols",
+						"DimPaymentType, stg2dimVendor lookup(VendorID == stg2dimVendor@ID,",
+						"     multiple: false,",
+						"     pickup: 'any',",
+						"     broadcast: 'auto')~> VendorID",
+						"DimRateCode, stg2PaymentType lookup(payment_type == stg2PaymentType@ID,",
+						"     multiple: false,",
+						"     pickup: 'any',",
+						"     broadcast: 'auto')~> DimPaymentType",
+						"DefineTypes, stg2DimRateCode lookup(RatecodeID == ID,",
+						"     multiple: false,",
+						"     pickup: 'any',",
+						"     broadcast: 'auto')~> DimRateCode",
+						"VendorID sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          VendorID as integer,",
+						"          PULocationID as integer,",
+						"          DOLocationID as integer,",
+						"          RatecodeID as integer,",
+						"          payment_type as integer,",
+						"          store_and_fwd_flag as string,",
+						"          tpep_pickup_datetime as timestamp,",
+						"          tpep_dropoff_datetime as timestamp,",
+						"          passenger_count as integer,",
+						"          trip_distance as decimal(18,0),",
+						"          fare_amount as decimal(18,0),",
+						"          extra as decimal(18,0),",
+						"          mta_tax as decimal(18,0),",
+						"          tip_amount as decimal(18,0),",
+						"          tolls_amount as decimal(18,0),",
+						"          improvement_surcharge as decimal(18,0),",
+						"          total_amount as decimal(18,0),",
+						"          congestion_surcharge as decimal(18,0),",
+						"          airport_fee as decimal(18,0),",
+						"          dim_Vendor_id as integer,",
+						"          dim_PaymentType_id as integer,",
+						"          dim_RateCode_id as integer",
+						"     ),",
+						"     format: 'table',",
+						"     store: 'synapseanalytics',",
+						"     schemaName: 'stg2',",
+						"     tableName: 'Fact',",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     truncate: true,",
+						"     allowCopyCommand: true,",
+						"     staged: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          VendorID,",
+						"          PULocationID,",
+						"          DOLocationID,",
+						"          RatecodeID,",
+						"          payment_type,",
+						"          store_and_fwd_flag,",
+						"          tpep_pickup_datetime,",
+						"          tpep_dropoff_datetime,",
+						"          passenger_count,",
+						"          trip_distance,",
+						"          fare_amount,",
+						"          extra,",
+						"          mta_tax,",
+						"          tip_amount,",
+						"          tolls_amount,",
+						"          improvement_surcharge,",
+						"          total_amount,",
+						"          congestion_surcharge,",
+						"          airport_fee,",
+						"          dim_Vendor_id,",
+						"          dim_PaymentType_id,",
+						"          dim_RateCode_id",
+						"     )) ~> stg2fact"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "DROP TABLE [stg2].[dim_PaymentType]\nGO\n\nSET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\n\nCREATE TABLE [stg2].[dim_PaymentType]\n( \n\t[dim_PaymentType_id] [int]  NULL,\n\t[ID] [int]  NULL,\n\t[NAME] [varchar](256)  NULL\n)\nWITH\n(\n\tDISTRIBUTION = ROUND_ROBIN,\n\tCLUSTERED COLUMNSTORE INDEX\n)\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "DPool",
+						"poolName": "DPool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Pick_and_partition')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "Pool",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "8757b28e-55a5-4e46-910a-e6e352a54935"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"synapse_widget": {
+						"version": "0.1"
+					},
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/efadbc61-64a8-4b09-a775-9d4676fbc85f/resourceGroups/Yellow/providers/Microsoft.Synapse/workspaces/yellow/bigDataPools/Pool",
+						"name": "Pool",
+						"type": "Spark",
+						"endpoint": "https://yellow.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/Pool",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net",
+							"authHeader": null
+						},
+						"sparkVersion": "3.2",
+						"nodeCount": 3,
+						"cores": 4,
+						"memory": 28,
+						"extraHeader": null
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"microsoft": {
+								"language": "python"
+							},
+							"ms_comment_ranges": {
+								"3de6b7c5-4012-487b-b315-12c5f15b6fcf": {
+									"text": "",
+									"start": {
+										"line": 1,
+										"column": 1
+									},
+									"end": {
+										"line": 1,
+										"column": 1
+									}
+								}
+							},
+							"ms_comments": [
+								{
+									"threadId": "3de6b7c5-4012-487b-b315-12c5f15b6fcf",
+									"text": "display(df.limit(10))",
+									"status": "active",
+									"user": {
+										"name": "Paulius Burba",
+										"idType": "aad"
+									},
+									"createdDateUTC": 1661594233203,
+									"modifiedDateUTC": 1661594233203,
+									"replies": [
+										{
+											"replyId": "eba7fbea-80fb-41c6-a497-3ab75669a676",
+											"text": "input.write.partitionBy(['tpep_dropoff_Datetime']).format(\"parquet\")",
+											"user": {
+												"name": "Paulius Burba",
+												"idType": "aad"
+											},
+											"createdDateUTC": 1661594781089,
+											"modifiedDateUTC": 1661594781089
+										}
+									]
+								}
+							],
+							"collapsed": false
+						},
+						"source": [
+							"%%pyspark\r\n",
+							"import pyspark.sql\t\r\n",
+							"from pyspark.sql.functions  import *\r\n",
+							"\r\n",
+							"df = spark.read.load('abfss://yellow@yellow2.dfs.core.windows.net/Incoming/yellow_tripdata_2022-04.parquet', format='parquet')\r\n",
+							"\r\n",
+							"RR= df.withColumn(\"test\", to_date(col(\"tpep_dropoff_Datetime\"))).write.partitionBy('test').format(\"parquet\").save('abfss://yellow@yellow2.dfs.core.windows.net/Staging', mode=\"append\")\r\n",
+							""
+						],
+						"attachments": null,
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Pool')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 5
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 10,
+					"minNodeCount": 3
+				},
+				"nodeCount": 0,
+				"nodeSize": "Small",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "3.2",
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": false,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "northeurope"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DPool')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "northeurope"
+		}
+	]
+}
