@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 3",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [VendorID]\n,[PULocationID]\n,[DOLocationID]\n,[RatecodeID]\n,[payment_type]\n,[store_and_fwd_flag]\n,[tpep_pickup_datetime]\n,[tpep_dropoff_datetime]\n,[passenger_count]\n,[trip_distance]\n,[fare_amount]\n,[extra]\n,[mta_tax]\n,[tip_amount]\n,[tolls_amount]\n,[improvement_surcharge]\n,[total_amount]\n,[congestion_surcharge]\n,[airport_fee]\n,[dim_Vendor_id]\n,[dim_PaymentType_id]\n,[dim_RateCode_id]\n FROM [read].[Fact]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DPool",
+				"poolName": "DPool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
