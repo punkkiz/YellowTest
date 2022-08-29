@@ -124,6 +124,14 @@ Data loading has 2 'stages'
 
 End user - views - views are way better user access solution as many operations as column names can be easily maintained without breaking too much stuff 
 
+After a bit of debugging, solution runs smoothly
+
+![image](https://user-images.githubusercontent.com/112269784/187216735-9245fa04-63d5-4d5b-8e50-3181de1709e7.png)
+
+
+data avaialbe through SSMS 
+
+![image](https://user-images.githubusercontent.com/112269784/187216924-9a3832f3-5dca-4ff8-a834-084fc3d4c2f8.png)
 
 
 
