@@ -1070,7 +1070,7 @@
 						"stg1DimVendor keyGenerate(output(dim_ID as long),",
 						"     startAt: 1L,",
 						"     stepValue: 1L) ~> dimVendorID",
-						"dimVendorID sink(allowSchemaDrift: true,",
+						"dimVendorID sink(allowSchemaDrift: false,",
 						"     validateSchema: false,",
 						"     format: 'table',",
 						"     store: 'synapseanalytics',",
