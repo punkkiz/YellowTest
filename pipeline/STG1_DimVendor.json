@@ -22,10 +22,10 @@
 					},
 					"staging": {
 						"linkedService": {
-							"referenceName": "yellow-WorkspaceDefaultStorage",
+							"referenceName": "Yellow",
 							"type": "LinkedServiceReference"
 						},
-						"folderPath": "a/a"
+						"folderPath": "yellow/synapse"
 					},
 					"compute": {
 						"coreCount": 8,
