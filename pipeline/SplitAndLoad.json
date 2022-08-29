@@ -68,47 +68,6 @@
 						"firstRowOnly": true
 					}
 				}
-			},
-			{
-				"name": "RowsWrite",
-				"description": "",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Insert",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "RowsWrite",
-					"value": {
-						"value": "@activity('Insert').output.runStatus.metrics.Insert.rowsWritten",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "RowsRead",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Insert",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "RowsRead",
-					"value": {
-						"value": "@activity('Insert').output.runStatus.metrics.Insert.rowsRead\n\n\n\n",
-						"type": "Expression"
-					}
-				}
 			}
 		],
 		"variables": {
