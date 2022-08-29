@@ -31,10 +31,13 @@ Orchestration - in order to perform tasks in specific sequence additional layer 
 Step 1: 
 
 Data file is manually loaded into a storage account:
+
 1. Folders
+
 ![FilePickFolders](https://user-images.githubusercontent.com/112269784/187184213-732dd051-8e4e-4775-8451-01f4bfe5b8e7.PNG)
 
 2. File
+
 ![FilePick](https://user-images.githubusercontent.com/112269784/187184143-dc9f7ee1-82dc-40bd-9315-d7214f9f1bef.PNG)
 
 
@@ -43,6 +46,7 @@ From here a "master' pipeline should be triggered (at the moment manually, howev
 Step 2
 
 Master package: 
+
 ![Msater](https://user-images.githubusercontent.com/112269784/187184513-302cebf2-26e5-475d-9d04-dc420547fcfb.PNG)
 
 
@@ -91,6 +95,7 @@ Next 3 packages are almost identical, they load missing dimensions (hardcode) an
 
 
 4. Fact table load 
+
 ![FactSTG2](https://user-images.githubusercontent.com/112269784/187188308-a3aa8c41-c11d-46ae-9b20-b40980fe0758.PNG)
 
 In order to prepare the data model, we need to prepare some stuff. One of which is surogate keys. Data itself is quite tidy however, many data quality checks can be performed at this step: data conversion errors, row counts after each operation etc. Data quality checks not implemented due lack of time, and usually it's a secondary goal of the project :) 
@@ -98,6 +103,7 @@ In order to prepare the data model, we need to prepare some stuff. One of which 
 However - this dataflow looks up the new surogate keys, mentioned earlier, and applies this data modeling techique onto the fact table.
 
 5. Data is ready to use in SQL views: 
+
 ![image](https://user-images.githubusercontent.com/112269784/187189159-ae5e1572-b39e-48c5-874f-fcd3a6572528.png)
 
 
@@ -113,6 +119,16 @@ Data loading has 2 'stages'
 
 End user - views - views are way better user access solution as many operations as column names can be easily maintained without breaking too much stuff 
 
+
+
+
+Improvements:
+
+   As mentioned above, file pickup can be re-build to be more flexible and accept multiple files, store the files more efficiently. 
+   Currently dimensions are hardcoded, ideally I would like to receive separate tables from source systems or managed master data solutions where dimension definitions are managed by key business users or sth.
+   Data quality checks - not implemented. As mentioned above, separate dataflow/pipeline parameters can be outputed to a separate logging table to check row error counts, maymbe even re-direct errored rows to a separate table... all depends on the need. 
+   Refresh scheduling - cureently everything is manual. Trigger on file arrival should work sort of OK in this scenario. If pickup script would be updated to pick only new files, and move files which are already in the DB to separate archive folder or something similar. 
+   
 
 
 
