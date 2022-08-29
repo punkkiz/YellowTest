@@ -245,7 +245,7 @@
 							},
 							"staging": {
 								"linkedService": {
-									"referenceName": "yellow-WorkspaceDefaultStorage",
+									"referenceName": "Yellow",
 									"type": "LinkedServiceReference"
 								},
 								"folderPath": "yellow/synapse"
@@ -268,7 +268,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/stg2Fact')]",
-				"[concat(variables('workspaceId'), '/linkedServices/yellow-WorkspaceDefaultStorage')]"
+				"[concat(variables('workspaceId'), '/linkedServices/Yellow')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
