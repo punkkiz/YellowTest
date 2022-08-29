@@ -1061,6 +1061,7 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     limit: 100,",
 						"     format: 'table',",
 						"     store: 'synapseanalytics',",
 						"     schemaName: 'dbo',",
@@ -1070,7 +1071,7 @@
 						"stg1DimVendor keyGenerate(output(dim_ID as long),",
 						"     startAt: 1L,",
 						"     stepValue: 1L) ~> dimVendorID",
-						"dimVendorID sink(allowSchemaDrift: false,",
+						"dimVendorID sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'table',",
 						"     store: 'synapseanalytics',",
@@ -1358,6 +1359,46 @@
 			"properties": {
 				"content": {
 					"query": "DROP TABLE [stg2].[dim_PaymentType]\nGO\n\nSET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\n\nCREATE TABLE [stg2].[dim_PaymentType]\n( \n\t[dim_PaymentType_id] [int]  NULL,\n\t[ID] [int]  NULL,\n\t[NAME] [varchar](256)  NULL\n)\nWITH\n(\n\tDISTRIBUTION = ROUND_ROBIN,\n\tCLUSTERED COLUMNSTORE INDEX\n)\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "DPool",
+						"poolName": "DPool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [VendorID]\n,[tpep_pickup_datetime]\n,[tpep_dropoff_datetime]\n,[passenger_count]\n,[trip_distance]\n,[RatecodeID]\n,[store_and_fwd_flag]\n,[PULocationID]\n,[DOLocationID]\n,[payment_type]\n,[fare_amount]\n,[extra]\n,[mta_tax]\n,[tip_amount]\n,[tolls_amount]\n,[improvement_surcharge]\n,[total_amount]\n,[congestion_surcharge]\n,[airport_fee]\n FROM [dbo].[Fact]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "DPool",
+						"poolName": "DPool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [VendorID]\n,[PULocationID]\n,[DOLocationID]\n,[RatecodeID]\n,[payment_type]\n,[store_and_fwd_flag]\n,[tpep_pickup_datetime]\n,[tpep_dropoff_datetime]\n,[passenger_count]\n,[trip_distance]\n,[fare_amount]\n,[extra]\n,[mta_tax]\n,[tip_amount]\n,[tolls_amount]\n,[improvement_surcharge]\n,[total_amount]\n,[congestion_surcharge]\n,[airport_fee]\n,[dim_Vendor_id]\n,[dim_PaymentType_id]\n,[dim_RateCode_id]\n FROM [read].[Fact]",
 					"metadata": {
 						"language": "sql"
 					},
